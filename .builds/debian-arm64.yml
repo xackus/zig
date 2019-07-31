@@ -1,4 +1,5 @@
-image: debian/stable#arm64
+image: debian/stable
+arch: arm64
 packages:
   - cmake
   - s3cmd
