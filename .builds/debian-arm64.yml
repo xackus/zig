@@ -2,7 +2,7 @@ image: debian/stable
 arch: arm64
 packages:
   - cmake
-  - s3cmd
+  - python3-pip
   - wget
   - llvm-8-dev
   - libclang-8-dev

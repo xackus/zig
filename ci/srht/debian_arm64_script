@@ -3,6 +3,8 @@
 set -x
 set -e
 
+pip3 install s3cmd
+
 JOBS="-j$(nproc)"
 
 mkdir build
