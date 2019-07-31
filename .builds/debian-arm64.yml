@@ -1,0 +1,13 @@
+image: debian/stable#arm64
+packages:
+  - cmake
+  - s3cmd
+  - wget
+  - llvm-8-dev
+  - libclang-8-dev
+secrets:
+  - 6c60aaee-92e7-4e7d-812c-114817689b4d
+sources:
+  - https://github.com/ziglang/zig
+tasks:
+  - build: cd zig && ./ci/srht/debian_arm64_script

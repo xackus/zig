@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -x
+set -e
+
+JOBS="-j$(nproc)"
+
+mkdir build
+cd build
+cmake ..
+make $JOBS install
+
+bin/zig build test-behavior -Dskip-release
