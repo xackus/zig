@@ -5529,7 +5529,8 @@ static LLVMValueRef ir_render_cmpxchg(CodeGen *g, IrExecutableGen *executable, I
     LLVMAtomicOrdering success_order = to_LLVMAtomicOrdering(instruction->success_order);
     LLVMAtomicOrdering failure_order = to_LLVMAtomicOrdering(instruction->failure_order);
 
-    LLVMValueRef result_val = ZigLLVMBuildCmpXchg(g->builder, ptr_val, cmp_val, new_val,
+    // TODO new parameter, specify align?
+    LLVMValueRef result_val = ZigLLVMBuildCmpXchg(g->builder, ptr_val, cmp_val, new_val, 0,
             success_order, failure_order, instruction->is_weak);
 
     ZigType *optional_type = instruction->base.value->type;
@@ -6312,20 +6313,23 @@ static LLVMValueRef ir_render_atomic_rmw(CodeGen *g, IrExecutableGen *executable
         } else {
             casted_operand = LLVMBuildZExt(g->builder, operand, actual_abi_type, "");
         }
-        LLVMValueRef uncasted_result = ZigLLVMBuildAtomicRMW(g->builder, op, casted_ptr, casted_operand, ordering,
+        // TODO new parameter, specify align?
+        LLVMValueRef uncasted_result = ZigLLVMBuildAtomicRMW(g->builder, op, casted_ptr, casted_operand, 0, ordering,
                 g->is_single_threaded);
         return LLVMBuildTrunc(g->builder, uncasted_result, get_llvm_type(g, operand_type), "");
     }
 
     if (get_codegen_ptr_type_bail(g, operand_type) == nullptr) {
-        return ZigLLVMBuildAtomicRMW(g->builder, op, ptr, operand, ordering, g->is_single_threaded);
+        // TODO new parameter, specify align?
+        return ZigLLVMBuildAtomicRMW(g->builder, op, ptr, operand, 0, ordering, g->is_single_threaded);
     }
 
     // it's a pointer but we need to treat it as an int
     LLVMValueRef casted_ptr = LLVMBuildBitCast(g->builder, ptr,
         LLVMPointerType(g->builtin_types.entry_usize->llvm_type, 0), "");
     LLVMValueRef casted_operand = LLVMBuildPtrToInt(g->builder, operand, g->builtin_types.entry_usize->llvm_type, "");
-    LLVMValueRef uncasted_result = ZigLLVMBuildAtomicRMW(g->builder, op, casted_ptr, casted_operand, ordering,
+    // TODO new parameter, specify align?
+    LLVMValueRef uncasted_result = ZigLLVMBuildAtomicRMW(g->builder, op, casted_ptr, casted_operand, 0, ordering,
             g->is_single_threaded);
     return LLVMBuildIntToPtr(g->builder, uncasted_result, get_llvm_type(g, operand_type), "");
 }

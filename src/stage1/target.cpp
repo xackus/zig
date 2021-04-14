@@ -485,6 +485,7 @@ uint32_t target_arch_pointer_bit_width(ZigLLVM_ArchType arch) {
         case ZigLLVM_armeb:
         case ZigLLVM_hexagon:
         case ZigLLVM_le32:
+        case ZigLLVM_m68k:
         case ZigLLVM_mips:
         case ZigLLVM_mipsel:
         case ZigLLVM_nvptx:
@@ -603,6 +604,8 @@ uint32_t target_arch_largest_atomic_bits(ZigLLVM_ArchType arch) {
 
         case ZigLLVM_x86_64:
             return 128;
+        case ZigLLVM_m68k:
+            zig_panic("TODO largest atomic bits for this CPU architecture");
     }
     zig_unreachable();
 }
@@ -831,6 +834,7 @@ const char *arch_stack_pointer_register_name(ZigLLVM_ArchType arch) {
         case ZigLLVM_kalimba:
         case ZigLLVM_le32:
         case ZigLLVM_le64:
+        case ZigLLVM_m68k:
         case ZigLLVM_mips:
         case ZigLLVM_mips64:
         case ZigLLVM_mips64el:
@@ -886,6 +890,7 @@ bool target_is_arm(const ZigTarget *target) {
         case ZigLLVM_kalimba:
         case ZigLLVM_le32:
         case ZigLLVM_le64:
+        case ZigLLVM_m68k:
         case ZigLLVM_mips:
         case ZigLLVM_mips64:
         case ZigLLVM_mips64el:
@@ -1113,6 +1118,7 @@ const char *target_libc_generic_name(const ZigTarget *target) {
         case ZigLLVM_Musl:
         case ZigLLVM_MuslEABI:
         case ZigLLVM_MuslEABIHF:
+        case ZigLLVM_MuslX32:
         case ZigLLVM_UnknownEnvironment:
             return "musl";
         case ZigLLVM_CODE16:

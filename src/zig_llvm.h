@@ -129,7 +129,7 @@ ZIG_EXTERN_C LLVMValueRef ZigLLVMBuildMemSet(LLVMBuilderRef B, LLVMValueRef Ptr,
         unsigned Align, bool isVolatile);
 
 ZIG_EXTERN_C LLVMValueRef ZigLLVMBuildCmpXchg(LLVMBuilderRef builder, LLVMValueRef ptr, LLVMValueRef cmp,
-        LLVMValueRef new_val, LLVMAtomicOrdering success_ordering,
+        LLVMValueRef new_val, unsigned align, LLVMAtomicOrdering success_ordering,
         LLVMAtomicOrdering failure_ordering, bool is_weak);
 
 ZIG_EXTERN_C LLVMValueRef ZigLLVMBuildNSWShl(LLVMBuilderRef builder, LLVMValueRef LHS, LLVMValueRef RHS,
@@ -292,6 +292,7 @@ enum ZigLLVM_ArchType {
     ZigLLVM_bpfeb,          // eBPF or extended BPF or 64-bit BPF (big endian)
     ZigLLVM_csky,           // CSKY: csky
     ZigLLVM_hexagon,        // Hexagon: hexagon
+    ZigLLVM_m68k,           // M68k: Motorola 680x0 family
     ZigLLVM_mips,           // MIPS: mips, mipsallegrex, mipsr6
     ZigLLVM_mipsel,         // MIPSEL: mipsel, mipsallegrexe, mipsr6el
     ZigLLVM_mips64,         // MIPS64: mips64, mips64r6, mipsn32, mipsn32r6
@@ -419,6 +420,7 @@ enum ZigLLVM_EnvironmentType {
     ZigLLVM_Musl,
     ZigLLVM_MuslEABI,
     ZigLLVM_MuslEABIHF,
+    ZigLLVM_MuslX32,
 
     ZigLLVM_MSVC,
     ZigLLVM_Itanium,
@@ -458,7 +460,7 @@ enum ZigLLVM_AtomicRMWBinOp {
 };
 
 LLVMValueRef ZigLLVMBuildAtomicRMW(LLVMBuilderRef B, enum ZigLLVM_AtomicRMWBinOp op,
-    LLVMValueRef PTR, LLVMValueRef Val,
+    LLVMValueRef PTR, LLVMValueRef Val, unsigned align,
     LLVMAtomicOrdering ordering, LLVMBool singleThread);
 
 LLVMValueRef ZigLLVMBuildAndReduce(LLVMBuilderRef B, LLVMValueRef Val);

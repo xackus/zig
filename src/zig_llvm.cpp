@@ -940,11 +940,11 @@ static AtomicOrdering mapFromLLVMOrdering(LLVMAtomicOrdering Ordering) {
 }
 
 LLVMValueRef ZigLLVMBuildCmpXchg(LLVMBuilderRef builder, LLVMValueRef ptr, LLVMValueRef cmp,
-        LLVMValueRef new_val, LLVMAtomicOrdering success_ordering,
+        LLVMValueRef new_val, unsigned align, LLVMAtomicOrdering success_ordering,
         LLVMAtomicOrdering failure_ordering, bool is_weak)
 {
     AtomicCmpXchgInst *inst = unwrap(builder)->CreateAtomicCmpXchg(unwrap(ptr), unwrap(cmp),
-                unwrap(new_val), mapFromLLVMOrdering(success_ordering), mapFromLLVMOrdering(failure_ordering));
+                unwrap(new_val), MaybeAlign(align), mapFromLLVMOrdering(success_ordering), mapFromLLVMOrdering(failure_ordering));
     inst->setWeak(is_weak);
     return wrap(inst);
 }
@@ -1189,12 +1189,12 @@ inline Attribute unwrap(LLVMAttributeRef Attr) {
 }
 
 LLVMValueRef ZigLLVMBuildAtomicRMW(LLVMBuilderRef B, enum ZigLLVM_AtomicRMWBinOp op,
-    LLVMValueRef PTR, LLVMValueRef Val,
-    LLVMAtomicOrdering ordering, LLVMBool singleThread) 
+    LLVMValueRef PTR, LLVMValueRef Val, unsigned align,
+    LLVMAtomicOrdering ordering, LLVMBool singleThread)
 {
     AtomicRMWInst::BinOp intop = toLLVMRMWBinOp(op);
     return wrap(unwrap(B)->CreateAtomicRMW(intop, unwrap(PTR),
-        unwrap(Val), toLLVMOrdering(ordering), 
+        unwrap(Val), MaybeAlign(align), toLLVMOrdering(ordering),
         singleThread ? SyncScope::SingleThread : SyncScope::System));
 }
 
@@ -1254,6 +1254,7 @@ static_assert((Triple::ArchType)ZigLLVM_bpfel == Triple::bpfel, "");
 static_assert((Triple::ArchType)ZigLLVM_bpfeb == Triple::bpfeb, "");
 static_assert((Triple::ArchType)ZigLLVM_csky == Triple::csky, "");
 static_assert((Triple::ArchType)ZigLLVM_hexagon == Triple::hexagon, "");
+static_assert((Triple::ArchType)ZigLLVM_m68k == Triple::m68k, "");
 static_assert((Triple::ArchType)ZigLLVM_mips == Triple::mips, "");
 static_assert((Triple::ArchType)ZigLLVM_mipsel == Triple::mipsel, "");
 static_assert((Triple::ArchType)ZigLLVM_mips64 == Triple::mips64, "");
@@ -1370,6 +1371,7 @@ static_assert((Triple::EnvironmentType)ZigLLVM_Android == Triple::Android, "");
 static_assert((Triple::EnvironmentType)ZigLLVM_Musl == Triple::Musl, "");
 static_assert((Triple::EnvironmentType)ZigLLVM_MuslEABI == Triple::MuslEABI, "");
 static_assert((Triple::EnvironmentType)ZigLLVM_MuslEABIHF == Triple::MuslEABIHF, "");
+static_assert((Triple::EnvironmentType)ZigLLVM_MuslX32 == Triple::MuslX32, "");
 static_assert((Triple::EnvironmentType)ZigLLVM_MSVC == Triple::MSVC, "");
 static_assert((Triple::EnvironmentType)ZigLLVM_Itanium == Triple::Itanium, "");
 static_assert((Triple::EnvironmentType)ZigLLVM_Cygnus == Triple::Cygnus, "");
