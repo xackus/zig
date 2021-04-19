@@ -132,7 +132,7 @@ enum svprfop
 };
 
 /* Function attributes */
-#define __aio static inline __attribute__((__always_inline__, __nodebug__, __overloadable__))
+#define __aio static __inline__ __attribute__((__always_inline__, __nodebug__, __overloadable__))
 
 #define svreinterpret_s8_s8(...) __builtin_sve_reinterpret_s8_s8(__VA_ARGS__)
 #define svreinterpret_s8_s16(...) __builtin_sve_reinterpret_s8_s16(__VA_ARGS__)
@@ -11877,7 +11877,7 @@ svint64_t svzip2(svint64_t, svint64_t);
 __aio __attribute__((__clang_arm_builtin_alias(__builtin_sve_svzip2_s16)))
 svint16_t svzip2(svint16_t, svint16_t);
 
-#if __ARM_FEATURE_SVE2_BITPERM
+#if defined (__ARM_FEATURE_SVE2_BITPERM)
 #define svbdep_n_u8(...) __builtin_sve_svbdep_n_u8(__VA_ARGS__)
 #define svbdep_n_u32(...) __builtin_sve_svbdep_n_u32(__VA_ARGS__)
 #define svbdep_n_u64(...) __builtin_sve_svbdep_n_u64(__VA_ARGS__)
@@ -11950,7 +11950,7 @@ __aio __attribute__((__clang_arm_builtin_alias(__builtin_sve_svbgrp_u64)))
 svuint64_t svbgrp(svuint64_t, svuint64_t);
 __aio __attribute__((__clang_arm_builtin_alias(__builtin_sve_svbgrp_u16)))
 svuint16_t svbgrp(svuint16_t, svuint16_t);
-#endif  //__ARM_FEATURE_SVE2_BITPERM
+#endif  //defined (__ARM_FEATURE_SVE2_BITPERM)
 
 #if defined(__ARM_FEATURE_SVE2)
 #define svaba_n_s8(...) __builtin_sve_svaba_n_s8(__VA_ARGS__)
