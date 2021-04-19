@@ -580,6 +580,7 @@ pub const ArchType = extern enum(c_int) {
     bpfeb,
     csky,
     hexagon,
+    m68k,
     mips,
     mipsel,
     mips64,

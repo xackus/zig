@@ -243,6 +243,7 @@ pub fn archToLLVM(arch_tag: std.Target.Cpu.Arch) llvm.ArchType {
         .bpfeb => .bpfeb,
         .csky => .csky,
         .hexagon => .hexagon,
+        .m68k => .m68k,
         .mips => .mips,
         .mipsel => .mipsel,
         .mips64 => .mips64,
