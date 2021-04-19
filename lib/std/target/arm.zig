@@ -1242,7 +1242,7 @@ pub const all_features = blk: {
     };
     result[@enumToInt(Feature.v8_7a)] = .{
         .llvm_name = "armv8.7-a",
-        .description = "ARMv86a architecture",
+        .description = "ARMv87a architecture",
         .dependencies = featureSet(&[_]Feature{
             .aclass,
             .crc,
@@ -1886,6 +1886,7 @@ pub const cpu = struct {
         .name = "cortex_m0",
         .llvm_name = "cortex-m0",
         .features = featureSet(&[_]Feature{
+            .no_branch_predictor,
             .v6m,
         }),
     };
@@ -1893,6 +1894,7 @@ pub const cpu = struct {
         .name = "cortex_m0plus",
         .llvm_name = "cortex-m0plus",
         .features = featureSet(&[_]Feature{
+            .no_branch_predictor,
             .v6m,
         }),
     };
@@ -1900,6 +1902,7 @@ pub const cpu = struct {
         .name = "cortex_m1",
         .llvm_name = "cortex-m1",
         .features = featureSet(&[_]Feature{
+            .no_branch_predictor,
             .v6m,
         }),
     };
@@ -1907,6 +1910,7 @@ pub const cpu = struct {
         .name = "cortex_m23",
         .llvm_name = "cortex-m23",
         .features = featureSet(&[_]Feature{
+            .no_branch_predictor,
             .no_movt,
             .v8m,
         }),
@@ -2222,6 +2226,7 @@ pub const cpu = struct {
         .name = "sc000",
         .llvm_name = "sc000",
         .features = featureSet(&[_]Feature{
+            .no_branch_predictor,
             .v6m,
         }),
     };

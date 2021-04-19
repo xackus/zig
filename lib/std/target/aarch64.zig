@@ -81,6 +81,7 @@ pub const Feature = enum {
     neoverse_n2,
     neoverse_v1,
     no_neg_immediates,
+    no_zcz_fp,
     nv,
     outline_atomics,
     pan,
@@ -166,7 +167,6 @@ pub const Feature = enum {
     xs,
     zcm,
     zcz,
-    zcz_fp,
     zcz_fp_workaround,
     zcz_gp,
 };
@@ -424,6 +424,7 @@ pub const all_features = blk: {
         .llvm_name = "cortex-r82",
         .description = "Cortex-R82 ARM Processors",
         .dependencies = featureSet(&[_]Feature{
+            .use_aa,
             .use_postra_scheduler,
             .v8r,
         }),
@@ -657,8 +658,11 @@ pub const all_features = blk: {
             .crypto,
             .dotprod,
             .fullfp16,
+            .fuse_aes,
             .rcpc,
             .ssbs,
+            .use_aa,
+            .use_postra_scheduler,
             .v8_2a,
         }),
     };
@@ -669,9 +673,12 @@ pub const all_features = blk: {
             .crypto,
             .dotprod,
             .fullfp16,
+            .fuse_aes,
             .rcpc,
             .spe,
             .ssbs,
+            .use_aa,
+            .use_postra_scheduler,
             .v8_2a,
         }),
     };
@@ -680,10 +687,14 @@ pub const all_features = blk: {
         .description = "Neoverse N2 ARM processors",
         .dependencies = featureSet(&[_]Feature{
             .bf16,
+            .crypto,
             .ete,
+            .fuse_aes,
             .i8mm,
             .mte,
             .sve2_bitperm,
+            .use_aa,
+            .use_postra_scheduler,
             .v8_5a,
         }),
     };
@@ -702,6 +713,7 @@ pub const all_features = blk: {
             .spe,
             .ssbs,
             .sve,
+            .use_aa,
             .use_postra_scheduler,
             .v8_4a,
         }),
@@ -709,6 +721,11 @@ pub const all_features = blk: {
     result[@enumToInt(Feature.no_neg_immediates)] = .{
         .llvm_name = "no-neg-immediates",
         .description = "Convert immediates and instructions to their negated or complemented equivalent when the immediate does not fit in the encoding.",
+        .dependencies = featureSet(&[_]Feature{}),
+    };
+    result[@enumToInt(Feature.no_zcz_fp)] = .{
+        .llvm_name = "no-zcz-fp",
+        .description = "Has no zero-cycle zeroing instructions for FP registers",
         .dependencies = featureSet(&[_]Feature{}),
     };
     result[@enumToInt(Feature.nv)] = .{
@@ -1248,14 +1265,8 @@ pub const all_features = blk: {
         .llvm_name = "zcz",
         .description = "Has zero-cycle zeroing instructions",
         .dependencies = featureSet(&[_]Feature{
-            .zcz_fp,
             .zcz_gp,
         }),
-    };
-    result[@enumToInt(Feature.zcz_fp)] = .{
-        .llvm_name = "zcz-fp",
-        .description = "Has zero-cycle zeroing instructions for FP registers",
-        .dependencies = featureSet(&[_]Feature{}),
     };
     result[@enumToInt(Feature.zcz_fp_workaround)] = .{
         .llvm_name = "zcz-fp-workaround",
@@ -1471,6 +1482,8 @@ pub const cpu = struct {
             .fuse_aes,
             .perfmon,
             .rcpc,
+            .use_aa,
+            .use_postra_scheduler,
             .v8_2a,
         }),
     };
@@ -1636,7 +1649,6 @@ pub const cpu = struct {
             .use_postra_scheduler,
             .use_reciprocal_square_root,
             .v8a,
-            .zcz_fp,
         }),
     };
     pub const exynos_m2 = CpuModel{
@@ -1653,7 +1665,6 @@ pub const cpu = struct {
             .slow_paired_128,
             .use_postra_scheduler,
             .v8a,
-            .zcz_fp,
         }),
     };
     pub const exynos_m3 = CpuModel{
@@ -1673,7 +1684,6 @@ pub const cpu = struct {
             .predictable_select_expensive,
             .use_postra_scheduler,
             .v8a,
-            .zcz_fp,
         }),
     };
     pub const exynos_m4 = CpuModel{

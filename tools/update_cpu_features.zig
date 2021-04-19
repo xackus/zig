@@ -219,7 +219,6 @@ const llvm_targets = [_]LlvmTarget{
                     "use_postra_scheduler",
                     "use_reciprocal_square_root",
                     "v8a",
-                    "zcz_fp",
                 },
             },
             .{
@@ -236,7 +235,6 @@ const llvm_targets = [_]LlvmTarget{
                     "slow_paired_128",
                     "use_postra_scheduler",
                     "v8a",
-                    "zcz_fp",
                 },
             },
         },
@@ -1281,12 +1279,15 @@ fn putDep(
     features_table: std.StringHashMap(Feature),
     zig_feature_name: []const u8,
 ) error{OutOfMemory}!void {
-    const feature = features_table.get(zig_feature_name).?;
-    if (feature.flatten) {
-        for (feature.deps) |dep| {
-            try putDep(deps_set, features_table, dep);
+    if (features_table.get(zig_feature_name)) |feature| {
+        if (feature.flatten) {
+            for (feature.deps) |dep| {
+                try putDep(deps_set, features_table, dep);
+            }
+        } else {
+            try deps_set.put(zig_feature_name, {});
         }
     } else {
-        try deps_set.put(zig_feature_name, {});
+        std.debug.panic("zig_feature_name not found: {s}", .{zig_feature_name});
     }
 }

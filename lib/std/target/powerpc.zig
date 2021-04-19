@@ -62,7 +62,9 @@ pub const Feature = enum {
     ppc_prera_sched,
     predictable_select_expensive,
     prefix_instrs,
+    privileged,
     recipprec,
+    rop_protect,
     secure_plt,
     slow_popcntd,
     spe,
@@ -430,9 +432,19 @@ pub const all_features = blk: {
             .power9_altivec,
         }),
     };
+    result[@enumToInt(Feature.privileged)] = .{
+        .llvm_name = "privileged",
+        .description = "Add privileged instructions",
+        .dependencies = featureSet(&[_]Feature{}),
+    };
     result[@enumToInt(Feature.recipprec)] = .{
         .llvm_name = "recipprec",
         .description = "Assume higher precision reciprocal estimates",
+        .dependencies = featureSet(&[_]Feature{}),
+    };
+    result[@enumToInt(Feature.rop_protect)] = .{
+        .llvm_name = "rop-protect",
+        .description = "Add ROP protect",
         .dependencies = featureSet(&[_]Feature{}),
     };
     result[@enumToInt(Feature.secure_plt)] = .{
